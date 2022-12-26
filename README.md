@@ -19,3 +19,11 @@ There are two options
 	$ npm test
 	```
 
+### Demo
+
+Scenario perform the following tests:
+
+1. Creates folder `files` in drobpox root
+2. Reads metadata of the folder to make sure the folder is present
+3. Creates `foo.txt` file in `files` folder by uploading it from `files/foo.txt` project directory
+4. Delets currently uploaded `foo.txt` file
