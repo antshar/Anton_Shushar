@@ -1,17 +1,13 @@
+import { DropboxPage } from '../pageClass';
 
-import dropboxV2Api from 'dropbox-v2-api';
-import fs from 'fs';
+const TOKEN = 'sl.BWci8cyrLrnUSxt8jD2dA6RX96D2D-Yx6X4bhfJ8NrvjUGuX_xDY_VHaqLyYc_cdHYh3dOleFAT0NQgdudOicv91C8VHUn2i-o7Fg-TIUndo4gVSnnq5Ss1vUkpw8gW6BJuUtRY'
 
-const TOKEN = 'sl.BVt7ws8VCnuqF3yrIxjpomB2wHcmmw6xPgROJl_Kca8FpX9oIgWAV7wOiDIOj9hEk__iB7F6RD_QdiZBfXprTVHhVdPAi7crIH3nfd4SFTpSXdDNAeDtiuI-ZeO_ujCXsvBXamI'
-
-let dropbox;
+let dropbox: DropboxPage;
 
 describe('dropbox web api requests', function () {
 
 	beforeAll(function () {
-		dropbox = dropboxV2Api.authenticate({
-			token: TOKEN
-		});
+		dropbox = new DropboxPage(TOKEN);
 	});
 
 	describe('Files manipulation', () => {
@@ -21,58 +17,49 @@ describe('dropbox web api requests', function () {
 		const filePath = dirPath + '/' + fileName;
 
 		it('create_folder', (done) => {
-			dropbox({
-				resource: 'files/create_folder',
-				parameters: {
-					path: dirPath
-				}
-			}, (err: any, result: { should: { have: { property: (arg0: string, arg1: string) => void; }; }; }) => {
+
+			//calling createFolder method of Dropbox Page Object
+			dropbox.createFolder(dirPath, (err: any, result: { should: { have: { property: (arg0: string, arg1: string) => void; }; }; }) => {
 				if (err) { throw err; }
 				result.should.have.property('name', dirName);
 				done();
 			});
+
 		});
+
 		it('get_metadata', (done) => {
-			dropbox({
-				resource: 'files/get_metadata',
-				parameters: {
-					path: dirPath,
-					include_media_info: false,
-					include_deleted: false,
-					include_has_explicit_shared_members: false
-				}
-			}, (err: any, result: { should: { have: { property: (arg0: string, arg1: string) => void; }; }; }) => {
+
+			//calling getMetadata method of Dropbox Page Object
+			dropbox.getMetadata(dirPath, (err: any, result: { should: { have: { property: (arg0: string, arg1: string) => void; }; }; }) => {
 				if (err) { throw err; }
 				result.should.have.property('.tag', 'folder');
 				result.should.have.property('path_lower', dirPath);
+				done();
+			});
 
-				done();
-			});
 		});
+
 		it('upload', (done) => {
-			dropbox({
-				resource: 'files/upload',
-				parameters: {
-					path: filePath
-				},
-				readStream: fs.createReadStream(filePath)
-			}, (err: any, result: { should: { have: { property: (arg0: string, arg1: string) => void; }; }; }) => {
+
+			//calling upload method of Dropbox Page Object
+			dropbox.upload(filePath, (err: any, result: { should: { have: { property: (arg0: string, arg1: string) => void; }; }; }) => {
 				if (err) { throw err; }
 				result.should.have.property('path_lower', filePath);
 				done();
 			});
+
 		});
+
 		it('delete', (done) => {
-			dropbox({
-				resource: 'files/delete',
-				parameters: {
-					'path': filePath
-				}
-			}, (err: any, result: { should: { have: { property: (arg0: string, arg1: string) => void; }; }; }) => {
+
+			//calling delete method of Dropbox Page Object
+			dropbox.delete(filePath, (err: any, result: { should: { have: { property: (arg0: string, arg1: string) => void; }; }; }) => {
 				if (err) { throw err; }
 				result.should.have.property('path_lower', filePath);
 				done();
 			});
+
 		});
+
 	});
 });
