@@ -7,7 +7,13 @@
  - [x] Run test via `npm test`
 
 ### Instruction
-There are two options
+First head to https://www.dropbox.com/developers/apps and gather a token for your app
+
+<img src="https://user-images.githubusercontent.com/54121465/211146137-8bf0f541-afee-4cd4-bd81-092afd8de157.png" width="800">
+
+Then paste the newly created token as `TOKEN` const in `spec/dropboxSpec.ts`
+
+There are two options to run the tests
 
 - Run each test scenario manually
 	```sh
